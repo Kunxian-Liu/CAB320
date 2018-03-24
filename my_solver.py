@@ -34,7 +34,6 @@ def print_the_team():
 
     print('Kunxian Liu, 9158090')
     print('Koh Kim Hai, 9329013')
-#    print('Maryam Mirzakhani, 12340003')
     
 # ---------------------------------------------------------------------------
         
@@ -63,8 +62,10 @@ def appear_as_subpart(some_part, goal_part):
     
     raise NotImplementedError
         
-    #    a = np.array(some_part)  # HINT
-
+        ps = np.array(some_part)  #
+        pg = np.array(goal_part)
+        
+        
 
 # ---------------------------------------------------------------------------
         
