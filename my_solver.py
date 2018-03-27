@@ -83,7 +83,11 @@ def appear_as_subpart(some_part, goal_part):
                 #if some_part[0,0] = goal_part[i,j] & some_part[0,1] = goal_part[i,j+1]...
                 # & some_part[1,0] = goal_part[i+1,j] & some_part[1,1] = goal_part[i+1,j+1]...
                 # & some_part[2,0] = goal_part[i+2,j] & some_part[2,1] = goal_part[i+2,j+1]...
-                if (ps[i,j] = pg[w,x]) & (ps[ps_w - (i+2), j]... # havent finished
+                if (ps[i,j] = pg[w,x]) & (ps[ps_w - (i+2), j]...: #if state havent finished
+                  return true# return true if appears
+                else:
+                  return false# return false otherwise
+                        
 
 # ---------------------------------------------------------------------------
         
