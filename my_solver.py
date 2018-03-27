@@ -62,10 +62,28 @@ def appear_as_subpart(some_part, goal_part):
     
     raise NotImplementedError
         
+        offset = self.offset
         ps = np.array(some_part)  #
         pg = np.array(goal_part)
         
+        ps_h = get_height(ps)
+        ps_w = get_width(ps)
+        #get rows and cols from some_part
         
+        pg_h = get_height(pg)
+        pg_w = get_width(pg)
+        #get rows and cols from goal_part
+        
+        #for each col of each row in some_part
+        for i in ps_w-1:
+          for j in ps_h-1:
+            #for each col of each row in goal_part
+            for w in pg_w-1:
+              for x in pg_h-1:
+                #if some_part[0,0] = goal_part[i,j] & some_part[0,1] = goal_part[i,j+1]...
+                # & some_part[1,0] = goal_part[i+1,j] & some_part[1,1] = goal_part[i+1,j+1]...
+                # & some_part[2,0] = goal_part[i+2,j] & some_part[2,1] = goal_part[i+2,j+1]...
+                if (ps[i,j] = pg[w,x]) & (ps[ps_w - (i+2), j]... # havent finished
 
 # ---------------------------------------------------------------------------
         
