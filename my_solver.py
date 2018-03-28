@@ -62,7 +62,7 @@ def appear_as_subpart(some_part, goal_part):
     
     raise NotImplementedError
 
-        ps = np.array(some_part)  #
+        ps = np.array(some_part)  #unexpected indent error on python!
         pg = np.array(goal_part)
         
         ps_h = get_height(ps)
