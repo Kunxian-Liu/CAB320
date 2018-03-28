@@ -61,8 +61,7 @@ def appear_as_subpart(some_part, goal_part):
     '''
     
     raise NotImplementedError
-        
-        offset = self.offset
+
         ps = np.array(some_part)  #
         pg = np.array(goal_part)
         
@@ -74,20 +73,26 @@ def appear_as_subpart(some_part, goal_part):
         pg_w = get_width(pg)
         #get rows and cols from goal_part
         
-        #for each col of each row in some_part
-        for i in ps_w-1:
-          for j in ps_h-1:
-            #for each col of each row in goal_part
-            for w in pg_w-1:
-              for x in pg_h-1:
-                #if some_part[0,0] = goal_part[i,j] & some_part[0,1] = goal_part[i,j+1]...
-                # & some_part[1,0] = goal_part[i+1,j] & some_part[1,1] = goal_part[i+1,j+1]...
-                # & some_part[2,0] = goal_part[i+2,j] & some_part[2,1] = goal_part[i+2,j+1]...
-                if (ps[i,j] = pg[w,x]) & (ps[ps_w - (i+2), j]...: #if state havent finished
-                  return true# return true if appears
+        
+        #checking it as a whole box moving across the other matrix
+        #2 lvl for loop prefered
+        #
+        
+        #for each col of each row in goal_part
+        for i in pg_w-ps_w:
+          for j in pg_h-ps_h:
+            #if the first index of some part matches a index of goal part  
+            if ps[0][0] = pg[i][j]:
+                #numpy function of extracting a matrix from a large matrix.
+                def submatrix ( matrix, startRow, startCol, size1, size2):
+                    return pg[startRow:startRow+size1,startCol:startCol+size2]
+                #form matrix for comparison 
+                pm = submatrix (pg, i, j, ps_w,ps_h)
+                #comparing if the selected matrix from goal part is equal to some part.
+                if np.array_equal(ps,pm):
+                    return true# return true if appears
                 else:
-                  return false# return false otherwise
-                        
+                    return false# return false otherwise
 
 # ---------------------------------------------------------------------------
         
