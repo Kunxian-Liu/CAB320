@@ -37,6 +37,7 @@ def print_the_team():
     
 # ---------------------------------------------------------------------------
         
+        
 def appear_as_subpart(some_part, goal_part):
     '''    
     Determine whether the part 'some_part' appears in another part 'goal_part'.
@@ -60,39 +61,45 @@ def appear_as_subpart(some_part, goal_part):
         False otherwise    
     '''
     
-    raise NotImplementedError
+    #raise NotImplementedError
+    #return TetrisPart.get_height
+    #return TetrisPart.get_width
 
-        ps = np.array(some_part)  #unexpected indent error on python!
-        pg = np.array(goal_part)
+    ps = np.array(some_part)  #
+    pg = np.array(goal_part)
+    
+    psT = TetrisPart(ps)
+    pgT = TetrisPart(pg)
+    
+    ps_h = psT.get_height()
+    ps_w = psT.get_width()
+    #get rows and cols from some_part
         
-        ps_h = get_height(ps)
-        ps_w = get_width(ps)
-        #get rows and cols from some_part
+    pg_h = pgT.get_height()
+    pg_w = pgT.get_width()
+    #get rows and cols from goal_part
         
-        pg_h = get_height(pg)
-        pg_w = get_width(pg)
-        #get rows and cols from goal_part
-        
-        
-        #checking it as a whole box moving across the other matrix
-        #2 lvl for loop prefered
-        #
-        
-        #for each col of each row in goal_part
-        for i in pg_w-ps_w:
-          for j in pg_h-ps_h:
-            #if the first index of some part matches a index of goal part  
-            if ps[0][0] = pg[i][j]:
+    #for each col of each row in goal_part
+    for i in range(pg_h-ps_h+1):
+        for j in range(pg_w-ps_w+1):
+        #if the first index of some part matches a index of goal part  
+            if ps[0][0] == pg[i][j]:
                 #numpy function of extracting a matrix from a large matrix.
                 def submatrix ( matrix, startRow, startCol, size1, size2):
                     return pg[startRow:startRow+size1,startCol:startCol+size2]
-                #form matrix for comparison 
+                    #form matrix for comparison 
                 pm = submatrix (pg, i, j, ps_w,ps_h)
+                pm_nonzero = np.nonzero(pm)
+                ps_nonzero = np.nonzero(ps)
                 #comparing if the selected matrix from goal part is equal to some part.
                 if np.array_equal(ps,pm):
-                    return true# return true if appears
+                    return True# return true if appears
+                elif np.array_equal(ps_nonzero,pm_nonzero):
+                    return True
                 else:
-                    return false# return false otherwise
+                    return False# return false otherwise
+ # check the nonzero part is matching. 
+ # try and see if the it can be simplified
 
 # ---------------------------------------------------------------------------
         
