@@ -17,10 +17,11 @@ import itertools
 import generic_search
 
 from assignment_one import (TetrisPart, AssemblyProblem, offset_range, 
-#                            display_state, 
+                            display_state, 
                             make_state_canonical, play_solution, 
-#                            load_state, make_random_state
+                            load_state, make_random_state
                             )
+#tetrispart = TetrisPart()
 
 # ---------------------------------------------------------------------------
 
@@ -30,41 +31,14 @@ def print_the_team():
     (full name + student number)
     '''
     
-    raise NotImplementedError
+    #raise NotImplementedError
 
     print('Kunxian Liu, 9158090')
-    print('Koh Kim Hai, 9329013')
+#    print('Grace Hopper, 12340002')
+#    print('Maryam Mirzakhani, 12340003')
     
 # ---------------------------------------------------------------------------
         
-        
-def appear_as_subpart(some_part, goal_part):
-    '''    
-    Determine whether the part 'some_part' appears in another part 'goal_part'.
-    
-    Formally, we say that 'some_part' appears in another part 'goal_part',
-    when the matrix representation 'S' of 'some_part' is a a submatrix 'M' of
-    the matrix representation 'G' of 'goal_part' and the following constraints
-    are satisfied:
-        for all indices i,j
-            S[i,j] == 0 or S[i,j] == M[i,j]
-            
-    During an assembly sequence that does not use rotations, any part present 
-    on the workbench has to appear somewhere in a goal part!
-    
-    @param
-        some_part: a tuple representation of a tetris part
-        goal_part: a tuple representation of another tetris part
-        
-    @return
-        True if 'some_part' appears in 'goal_part'
-        False otherwise    
-    '''
-    
-    #raise NotImplementedError
-    #return TetrisPart.get_height
-    #return TetrisPart.get_width
-
 def appear_as_subpart(some_part, goal_part):
     '''    
     Determine whether the part 'some_part' appears in another part 'goal_part'.
@@ -146,8 +120,30 @@ def cost_rotated_subpart(some_part, goal_part):
         np.inf  if no rotated version of 'some_part' appear in 'goal_part'
     
     '''
+    '''
+    compare subpart to goal_part
+    do you need to rotate?
+    no? -> sub_part == goal part
+    rotate_counter=np.inf
+    yes-> rotate-> (assignment_one) -> assignment_one.rotate90()
+    rotate_counter=rotate_counter+1
+    loop until sub_part == goal_part OR rotate_counter == 4 (360deg)
+    '''
+#    raise NotImplementedError
+    rotate_counter = 0
     
-    raise NotImplementedError
+    while rotate_counter < 4:
+        ps = np.array(some_part)  #
+        pg = np.array(goal_part)
+    
+        psT = TetrisPart(ps)
+        pgT = TetrisPart(pg)
+        
+        if appear_as_subpart(ps,pg) == False:
+            psT.rotate90()
+            rotate_counter += 1
+        #do rotation
+        #com
     
     
 # ---------------------------------------------------------------------------
@@ -170,6 +166,16 @@ class AssemblyProblem_1(AssemblyProblem):
         """The constructor specifies the initial state, and possibly a goal
         state, if there is a unique goal.  Your subclass's constructor can add
         other arguments."""
+        if goal is None:
+            self.goal = AssemblyProblem.goal
+        else:
+            self.goal = goal
+        if initial:
+            self.initial = initial
+        else:
+            self.inital = AssemblyProblem.initial
+        self.initial = tuple(self.initial)
+        self.goal = tuple(self.goal)
         # Call the parent class constructor.
         # Here the parent class is 'AssemblyProblem' 
         # which itself is derived from 'generic_search.Problem'
@@ -190,12 +196,18 @@ class AssemblyProblem_1(AssemblyProblem):
             state passed as argument.
         
         """
-        #
+        #questions: doing the for loop again or using appear_as_subpart??? 
 
-        raise NotImplementedError
-
+        #able to move right or left
+        #merge all into one tuple
+        #fill in 0 into the empty index
+        #we want to move left or right. 
+        #cant move further than left or right bound
+        #left is greater than 0, right is less than length(self). 
+        #raise NotImplementedError
+        part_list = list(itertools.permutations(state))
         # part_list = list(state)  #    HINT
-        
+        return part_list
 
 
     def result(self, state, action):
@@ -470,5 +482,6 @@ def solve_4(initial, goal):
 
     
 if __name__ == '__main__':
-    pass
+    appear_as_subpart()
+    #cost_rotated_subpart():
     
