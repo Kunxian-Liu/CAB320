@@ -65,6 +65,33 @@ def appear_as_subpart(some_part, goal_part):
     #return TetrisPart.get_height
     #return TetrisPart.get_width
 
+def appear_as_subpart(some_part, goal_part):
+    '''    
+    Determine whether the part 'some_part' appears in another part 'goal_part'.
+    
+    Formally, we say that 'some_part' appears in another part 'goal_part',
+    when the matrix representation 'S' of 'some_part' is a a submatrix 'M' of
+    the matrix representation 'G' of 'goal_part' and the following constraints
+    are satisfied:
+        for all indices i,j
+            S[i,j] == 0 or S[i,j] == M[i,j]
+            
+    During an assembly sequence that does not use rotations, any part present 
+    on the workbench has to appear somewhere in a goal part!
+    
+    @param
+        some_part: a tuple representation of a tetris part
+        goal_part: a tuple representation of another tetris part
+        
+    @return
+        True if 'some_part' appears in 'goal_part'
+        False otherwise    
+    '''
+    
+    #raise NotImplementedError
+    #return TetrisPart.get_height
+    #return TetrisPart.get_width
+
     ps = np.array(some_part)  #
     pg = np.array(goal_part)
     
@@ -88,18 +115,16 @@ def appear_as_subpart(some_part, goal_part):
                 def submatrix ( matrix, startRow, startCol, size1, size2):
                     return pg[startRow:startRow+size1,startCol:startCol+size2]
                     #form matrix for comparison 
-                pm = submatrix (pg, i, j, ps_w,ps_h)
-                pm_nonzero = np.nonzero(pm)
-                ps_nonzero = np.nonzero(ps)
+                pm = submatrix (pg, i, j, ps_h,ps_w)
+                #
+                ps_nonzero_index = np.nonzero(ps)
+                #
+                ps_nonzero=ps[ps_nonzero_index]
+                pm_nonzero=pm[ps_nonzero_index]
                 #comparing if the selected matrix from goal part is equal to some part.
-                if np.array_equal(ps,pm):
+                if np.array_equal(ps_nonzero,pm_nonzero):
                     return True# return true if appears
-                elif np.array_equal(ps_nonzero,pm_nonzero):
-                    return True
-                else:
-                    return False# return false otherwise
- # check the nonzero part is matching. 
- # try and see if the it can be simplified
+    return False
 
 # ---------------------------------------------------------------------------
         
