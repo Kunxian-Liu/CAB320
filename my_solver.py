@@ -229,7 +229,9 @@ class AssemblyProblem_1(AssemblyProblem):
           a state in canonical order
         
         """
-        # Here a workbench state is a frozenset of parts        
+        # Here a workbench state is a frozenset of parts
+        #Extract the values from action
+        pa,pu,offset=action
         # Make a new TetrisPart Object with the given action
         new_part = TetrisPart(pa, pu, offset)
         # Make a copy of the state as a list type
