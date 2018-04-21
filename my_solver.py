@@ -196,19 +196,27 @@ class AssemblyProblem_1(AssemblyProblem):
             state passed as argument.
         
         """
-        #questions: doing the for loop again or using appear_as_subpart??? 
+        #Make a copy of the state as a list
+        part_list=listt(state)
+        # Make an empty array to append all legal actions (pa,pu, offset)
+        action_list = []
 
-        #able to move right or left
-        #merge all into one tuple
-        #fill in 0 into the empty index
-        #we want to move left or right. 
-        #cant move further than left or right bound
-        #left is greater than 0, right is less than length(self). 
-        #raise NotImplementedError
-        part_list = list(itertools.permutations(state))
-        # part_list = list(state)  #    HINT
-        return part_list
-
+        for pa,pu in itertools.permutations(part_list,2):
+        # returns the permutation of the pa, pu pair
+          start, end = offset_range(pa, pu)
+          # Returns start, end
+          for offset in range(start, end):
+            action_list.append((pa, pu, offset))
+  
+        # This nested for loop will return all permutation of the pairs with a valid offset range[)
+        # The range will include the start value and exclude the end value (to help with pythonic indexing)
+    
+        return action_list
+        
+    #stacking
+     #Yes
+    #rotating?
+     #No
 
     def result(self, state, action):
         """
@@ -221,13 +229,23 @@ class AssemblyProblem_1(AssemblyProblem):
           a state in canonical order
         
         """
-        # Here a workbench state is a frozenset of parts        
- 
-        raise NotImplementedError
-
-        # pa, pu, offset = action # HINT
-
-
+        # Here a workbench state is a frozenset of parts
+        #Extract the values from action
+        pa,pu,offset=action
+        # Make a new TetrisPart Object with the given action
+        new_part = TetrisPart(pa, pu, offset)
+        # Make a copy of the state as a list type
+        state_list=list(state)
+        # Dequeue pa,pu from the list
+        state_list.remove(pa)
+        state_list.remove(pu)
+        # Queue the new_part into the list
+        state_list.append(new_part)
+        # This effectively "stacks" the pa & pu together at the specified offset
+        # Make the state_list canonical to make sure it is in the correct order
+        state_list = make_canonical(state_list)
+        # Return a tuple of tuples
+        return tuple(state_list)
 # ---------------------------------------------------------------------------
 
 class AssemblyProblem_2(AssemblyProblem_1):
@@ -268,10 +286,27 @@ class AssemblyProblem_2(AssemblyProblem_1):
         A candidate action is eliminated if and only if the new part 
         it creates does not appear in the goal state.
         """
-        #
-
-        raise NotImplementedError
-
+        #Make an empty list to append pruned actions
+        action_list=[]
+        # Make a copy of the state as a list
+        state_list=list(state)
+        
+        # Make a similar nested for loop as AssemblyProblem_1
+        for pa,pu in itertools.permutations(state_list,2):
+          
+          start, end = offset_range(pa, pu)
+          # Returns start, end
+          for offset in range(start, end):
+            # Make a TetrisPart of the pa,pu and offset to get a value for TetrisPart.offset
+            temp_piece=TetrisPart(pa,pu,offset)
+            
+            # Pruning
+            # If valid piece, append the action
+            # Does it appear in the goal state?
+            if temp_piece.offset!=None and appear_as_subpart(temp_piece,self.goal):
+              action_list.append((pa, pu, offset))
+        
+        return action_list
 
 # ---------------------------------------------------------------------------
 
