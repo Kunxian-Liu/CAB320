@@ -143,8 +143,11 @@ def cost_rotated_subpart(some_part, goal_part):
             psT.rotate90()
             rotate_counter += 1
         #do rotation
-        #com
+        #return rotate_counter
     
+    # if counter exits loop, there is no match; set value to infinity and exit
+    rotate_counter=np.inf
+    return rotate_counter
     
 # ---------------------------------------------------------------------------
 
@@ -166,6 +169,8 @@ class AssemblyProblem_1(AssemblyProblem):
         """The constructor specifies the initial state, and possibly a goal
         state, if there is a unique goal.  Your subclass's constructor can add
         other arguments."""
+        
+        '''
         if goal is None:
             self.goal = AssemblyProblem.goal
         else:
@@ -176,6 +181,8 @@ class AssemblyProblem_1(AssemblyProblem):
             self.inital = AssemblyProblem.initial
         self.initial = tuple(self.initial)
         self.goal = tuple(self.goal)
+        '''
+        
         # Call the parent class constructor.
         # Here the parent class is 'AssemblyProblem' 
         # which itself is derived from 'generic_search.Problem'
@@ -306,7 +313,8 @@ class AssemblyProblem_2(AssemblyProblem_1):
             # Pruning
             # If valid piece, append the action
             # Does it appear in the goal state?
-            if temp_piece.offset!=None and appear_as_subpart(temp_piece,self.goal):
+            # self.goal is NOT a part -> how to convert state to part?
+            if temp_piece.offset!=None and appear_as_subpart(temp_piece,TetrisPart(self.goal)):
               action_list.append((pa, pu, offset))
         
         return action_list
@@ -350,8 +358,20 @@ class AssemblyProblem_3(AssemblyProblem_1):
         
         """
         #
+        #Make a copy of the state as a list
+        part_list=list(state)
+        # Make an empty array to append all legal actions (pa,pu, offset)
+        action_list = []
 
-        raise NotImplementedError
+        for pa,pu in itertools.permutations(part_list,2):
+        # returns the permutation of the pa, pu pair
+          start, end = offset_range(pa, pu)
+          # Returns start, end
+          for offset in range(start, end):
+            action_list.append((pa, pu, offset))
+  
+        # This nested for loop will return all permutation of the pairs with a valid offset range[)
+        # The range will include the start value and exclude the end value (to help with pythonic indexing)
 
         
     def result(self, state, action):
@@ -362,34 +382,27 @@ class AssemblyProblem_3(AssemblyProblem_1):
 
         The action can be a drop or rotation.        
         """
-        # Here a workbench state is a frozenset of parts        
 
-        #raise NotImplementedError
         # Here a workbench state is a frozenset of parts
         #Extract the values from action
-        '''
-        pa,pu,offset=action    
-        if action == 0:
-            #rotate the piece
-            # Make the state_list canonical to make sure it is in the correct order
-            #state_list = make_state_canonical(state_list)
-        else:
-            # Make a new TetrisPart Object with the given action
-            new_part = TetrisPart(pa, pu, offset)
-            # Make a copy of the state as a list type
-            state_list=list(state)
-            # Dequeue pa,pu from the list
-            state_list.remove(pa)
-            state_list.remove(pu)
-            # Queue the new_part into the list
-            state_list.append(new_part)
-            #state_list.append(tuple(new_part))
-            # This effectively "stacks" the pa & pu together at the specified offset
-            # Make the state_list canonical to make sure it is in the correct order
-            state_list = make_state_canonical(state_list)
+        pa,pu,offset=action
+        # Make a new TetrisPart Object with the given action
+        new_part = TetrisPart(pa, pu, offset)
+        # Make a copy of the state as a list type
+        state_list=list(state)
+        # Dequeue pa,pu from the list
+        state_list.remove(pa)
+        state_list.remove(pu)
+        # Queue the new_part into the list
+        #get forzen, new part
+        new_part = new_part.get_frozen()
+        state_list.append(new_part)
+        #state_list.append(tuple(new_part))
+        # This effectively "stacks" the pa & pu together at the specified offset
+        # Make the state_list canonical to make sure it is in the correct order
+        state_list = make_state_canonical(state_list)
         # Return a tuple of tuples
         return tuple(state_list)
-        '''
         
 # ---------------------------------------------------------------------------
 
@@ -478,7 +491,7 @@ def solve_1(initial, goal):
     # Implement Tree Search (BFS)
     # Return Actions based on best path
     node = breadth_first_graph_search(assembly_problem)
-    node = Node(node)
+    #node = Node(node)
     if node is None:
         # no solution
         return 'no solution'
@@ -502,17 +515,21 @@ def solve_2(initial, goal):
         - the string 'no solution' if the problem is not solvable
         - otherwise return the sequence of actions to go from state
         'initial' to state 'goal'
-    
+    '''
     
 
     print('\n++  busy searching in solve_2() ...  ++\n')
-    raise NotImplementedError
-    #assembly_problem = AssemblyProblem_1(initial, goal) # HINT
+    #raise NotImplementedError
+    assembly_problem = AssemblyProblem_2(initial, goal) # HINT
     # Implement Tree Search (BFS)
     # Return Actions based on best path
-    #action_list=breadth_first_graph_search(assembly_problem)
-    #return action_list
-    '''
+    node=breadth_first_graph_search(assembly_problem)
+    if node is None:
+        # no solution
+        return 'no solution'
+    else:
+        return node.solution()
+    
 
 # ---------------------------------------------------------------------------
         
@@ -534,7 +551,7 @@ def solve_3(initial, goal):
     print('\n++  busy searching in solve_3() ...  ++\n')
     #raise NotImplementedError
     
-    assembly_problem = AssemblyProblem_1(initial, goal) # HINT
+    assembly_problem = AssemblyProblem_3(initial, goal) # HINT
     # Implement Tree Search (BFS)
     # Return Actions based on best path
     action_list=breadth_first_graph_search(assembly_problem)
