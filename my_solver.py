@@ -14,8 +14,8 @@ import numpy as np
 
 import itertools
 
-import generic_search
-
+#import generic_search
+from generic_search import (Node,breadth_first_tree_search,breadth_first_graph_search)
 from assignment_one import (TetrisPart, AssemblyProblem, offset_range, 
                             display_state, 
                             make_state_canonical, play_solution, 
@@ -197,7 +197,7 @@ class AssemblyProblem_1(AssemblyProblem):
         
         """
         #Make a copy of the state as a list
-        part_list=listt(state)
+        part_list=list(state)
         # Make an empty array to append all legal actions (pa,pu, offset)
         action_list = []
 
@@ -240,10 +240,13 @@ class AssemblyProblem_1(AssemblyProblem):
         state_list.remove(pa)
         state_list.remove(pu)
         # Queue the new_part into the list
+        #get forzen, new part
+        new_part = new_part.get_frozen()
         state_list.append(new_part)
+        #state_list.append(tuple(new_part))
         # This effectively "stacks" the pa & pu together at the specified offset
         # Make the state_list canonical to make sure it is in the correct order
-        state_list = make_canonical(state_list)
+        state_list = make_state_canonical(state_list)
         # Return a tuple of tuples
         return tuple(state_list)
 # ---------------------------------------------------------------------------
@@ -360,10 +363,34 @@ class AssemblyProblem_3(AssemblyProblem_1):
         The action can be a drop or rotation.        
         """
         # Here a workbench state is a frozenset of parts        
- 
-        raise NotImplementedError
 
-
+        #raise NotImplementedError
+        # Here a workbench state is a frozenset of parts
+        #Extract the values from action
+        '''
+        pa,pu,offset=action    
+        if action == 0:
+            #rotate the piece
+            # Make the state_list canonical to make sure it is in the correct order
+            #state_list = make_state_canonical(state_list)
+        else:
+            # Make a new TetrisPart Object with the given action
+            new_part = TetrisPart(pa, pu, offset)
+            # Make a copy of the state as a list type
+            state_list=list(state)
+            # Dequeue pa,pu from the list
+            state_list.remove(pa)
+            state_list.remove(pu)
+            # Queue the new_part into the list
+            state_list.append(new_part)
+            #state_list.append(tuple(new_part))
+            # This effectively "stacks" the pa & pu together at the specified offset
+            # Make the state_list canonical to make sure it is in the correct order
+            state_list = make_state_canonical(state_list)
+        # Return a tuple of tuples
+        return tuple(state_list)
+        '''
+        
 # ---------------------------------------------------------------------------
 
 class AssemblyProblem_4(AssemblyProblem_3):
@@ -445,9 +472,20 @@ def solve_1(initial, goal):
     '''
 
     print('\n++  busy searching in solve_1() ...  ++\n')
-    raise NotImplementedError
+    #raise NotImplementedError
     
-    # assembly_problem = AssemblyProblem_1(initial, goal) # HINT
+    assembly_problem = AssemblyProblem_1(initial, goal) # HINT
+    # Implement Tree Search (BFS)
+    # Return Actions based on best path
+    node = breadth_first_graph_search(assembly_problem)
+    node = Node(node)
+    if node is None:
+        # no solution
+        return 'no solution'
+    else:
+        return node.solution()
+    
+    
     
 
 # ---------------------------------------------------------------------------
@@ -465,11 +503,16 @@ def solve_2(initial, goal):
         - otherwise return the sequence of actions to go from state
         'initial' to state 'goal'
     
-    '''
+    
 
     print('\n++  busy searching in solve_2() ...  ++\n')
     raise NotImplementedError
-    
+    #assembly_problem = AssemblyProblem_1(initial, goal) # HINT
+    # Implement Tree Search (BFS)
+    # Return Actions based on best path
+    #action_list=breadth_first_graph_search(assembly_problem)
+    #return action_list
+    '''
 
 # ---------------------------------------------------------------------------
         
@@ -486,10 +529,17 @@ def solve_3(initial, goal):
         - otherwise return the sequence of actions to go from state
         'initial' to state 'goal'
     
-    '''
+    
 
     print('\n++  busy searching in solve_3() ...  ++\n')
-    raise NotImplementedError
+    #raise NotImplementedError
+    
+    assembly_problem = AssemblyProblem_1(initial, goal) # HINT
+    # Implement Tree Search (BFS)
+    # Return Actions based on best path
+    action_list=breadth_first_graph_search(assembly_problem)
+    return action_list
+'''
     
 # ---------------------------------------------------------------------------
         
